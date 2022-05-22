@@ -10,6 +10,8 @@ import requests
 import sys
 
 while(1):
+
+
     book = {}
     response = requests.get('https://api.bithumb.com/public/orderbook/BTC_KRW/?count=5')
     book = response.json()
@@ -29,12 +31,15 @@ while(1):
     
     df = bids.append(asks)
     df['timestamp'] = datetime.datetime.now()
-
-    fn = 'test.csv'
+    
+    timestamp = datetime.datetime.now()
+    fn = timestamp.strftime("%Y-%m-%d") + '-bithumb-btc-orderbook' + '.csv'
 
     header = os.path.exists(fn)
     if header == False:
         df.to_csv(fn, index=False, header=True, mode = 'a')
     else:
         df.to_csv(fn, index=False, header=False, mode = 'a')
+    
+    time.sleep(1)
 
